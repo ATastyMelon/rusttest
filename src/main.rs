@@ -35,6 +35,8 @@ fn _start() -> ! {
     .ok()
     .unwrap();
 
+    let mut timer = hal::Timer::new(pac.TIMER, &mut pac.RESETS, &clocks);
+
     let sio = hal::Sio::new(pac.SIO);
 
     let pins = hal::gpio::Pins::new(
