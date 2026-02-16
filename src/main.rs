@@ -20,9 +20,8 @@ const XTAL_FREQ_HZ: u32 = 12_000_000u32;
 fn _start() -> ! {
     let mut pac = hal::pac::Peripherals::take().unwrap();
 
-        let mut watchdog = hal::Watchdog::new(pac.WATCHDOG);
+    let mut watchdog = hal::Watchdog::new(pac.WATCHDOG);
 
-    // Configure the clocks
     let clocks = hal::clocks::init_clocks_and_plls(
         XTAL_FREQ_HZ,
         pac.XOSC,
@@ -38,7 +37,7 @@ fn _start() -> ! {
 
     let sio = hal::Sio::new(pac.SIO);
 
-        let pins = hal::gpio::Pins::new(
+    let mut pins = hal::gpio::Pins::new(
         pac.IO_BANK0,
         pac.PADS_BANK0,
         sio.gpio_bank0,
@@ -47,9 +46,14 @@ fn _start() -> ! {
     
     let mut led_pin = pins.gpio25.into_push_pull_output();
 
-    led_pin.set_high().unwrap();
+    let mut gpio0 = pins.gpio0.into_push_pull_output();
 
-    loop {}
+    loop {
+        led_pin.set_high().unwrap();
+        timer.delay_ms(500);
+        led_pin.set_low().unwrap();
+        timer.delay_ms(500);
+    }
 }
 
 #[panic_handler]
