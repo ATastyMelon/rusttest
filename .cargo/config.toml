@@ -9,6 +9,7 @@ target = "thumbv6m-none-eabi"
 linker = "flip-link"
 rustflags = [
     "-C", "link-arg=--nmagic",
+    "-C", "link-arg=--verbose",
     "-C", "link-arg=-Tlink.x",
     "-C", "no-vectorize-loops",
     ]
