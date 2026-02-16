@@ -31,13 +31,14 @@ fn _start() -> ! {
         &mut pac.RESETS,
         &mut watchdog,
     )
+    .ok()
     .unwrap();
 
     let mut timer = hal::Timer::new(pac.TIMER, &mut pac.RESETS, &clocks);
 
     let sio = hal::Sio::new(pac.SIO);
 
-    let mut pins = hal::gpio::Pins::new(
+    let pins = hal::gpio::Pins::new(
         pac.IO_BANK0,
         pac.PADS_BANK0,
         sio.gpio_bank0,
@@ -45,8 +46,6 @@ fn _start() -> ! {
     );
     
     let mut led_pin = pins.gpio25.into_push_pull_output();
-
-    let mut gpio0 = pins.gpio0.into_push_pull_output();
 
     loop {
         led_pin.set_high().unwrap();
