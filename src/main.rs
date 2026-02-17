@@ -10,6 +10,11 @@ use hal::entry;
 
 use rp2040_hal as hal;
 
+unsafe extern "C" {
+    static __PAYLOAD: u32;
+    static __PAYLOAD_END: u32;
+}
+
 #[unsafe(link_section = ".boot2")]
 #[used]
 pub static BOOT2: [u8; 256] = rp2040_boot2::BOOT_LOADER_W25Q080;
@@ -34,8 +39,6 @@ fn _start() -> ! {
     .ok()
     .unwrap();
 
-    let mut timer = hal::Timer::new(pac.TIMER, &mut pac.RESETS, &clocks);
-
     let sio = hal::Sio::new(pac.SIO);
 
     let pins = hal::gpio::Pins::new(
@@ -44,6 +47,8 @@ fn _start() -> ! {
         sio.gpio_bank0,
         &mut pac.RESETS,
     );
+
+    let mut timer = hal::Timer::new(pac.TIMER, &mut pac.RESETS, &clocks);
     
     let mut led_pin = pins.gpio25.into_push_pull_output();
 
