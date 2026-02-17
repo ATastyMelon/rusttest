@@ -57,6 +57,8 @@ fn _start() -> ! {
         timer.delay_ms(500);
         led_pin.set_low().unwrap();
         timer.delay_ms(500);
+
+        watchdog.feed();
     }
 }
 
