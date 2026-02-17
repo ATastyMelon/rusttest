@@ -3,6 +3,8 @@
 
 use core::panic::PanicInfo;
 
+use cortex_m_semihosting::hprintln;
+
 use embedded_hal::delay::DelayNs;
 use embedded_hal::digital::OutputPin;
 
@@ -22,7 +24,7 @@ pub static BOOT2: [u8; 256] = rp2040_boot2::BOOT_LOADER_W25Q080;
 const XTAL_FREQ_HZ: u32 = 12_000_000u32;
 
 #[entry]
-fn _start() -> ! {
+fn main() -> ! {
     let mut pac = hal::pac::Peripherals::take().unwrap();
 
     let mut watchdog = hal::Watchdog::new(pac.WATCHDOG);
@@ -64,5 +66,6 @@ fn _start() -> ! {
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    hprintln!("{}", _info);
     loop {}
 }
