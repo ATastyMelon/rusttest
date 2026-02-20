@@ -1,3 +1,4 @@
 /target
 /.vscode
 *.uf2
+.DS_STORE
