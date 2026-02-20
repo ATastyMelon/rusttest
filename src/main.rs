@@ -16,10 +16,31 @@ async fn main(_spawner: Spawner) {
     let mut watchdog = Watchdog::new(p.WATCHDOG);
     let mut led_pin = Output::new(p.PIN_25, Level::Low);
 
-    led_pin.set_high();
+    let count_max= 1000;
+    let mut count = 0;
+    let mut countdown: bool = true;
 
     loop {
-        Timer::after_millis(15).await;
+
+        led_pin.set_high();
+        Timer::after_micros(count).await;
+        led_pin.set_low();
+        Timer::after_micros(count_max - count).await;
+
+        if countdown {
+            if count == 0 {
+                countdown = false;
+            } else {
+                count -= 1;
+            }
+        } else {
+            if count < count_max {
+                count += 1;
+            } else {
+                countdown = true;
+            }
+        }
+
         watchdog.feed();
     }
     
