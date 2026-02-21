@@ -2,3 +2,4 @@
 /.vscode
 *.uf2
 .DS_STORE
+Cargo.lock

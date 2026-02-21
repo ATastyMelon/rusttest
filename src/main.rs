@@ -3,6 +3,8 @@
 
 use core::panic::PanicInfo;
 
+use cortex_m_semihosting::hprintln;
+
 use embassy_executor::Spawner;
 use embassy_rp::{self as hal, gpio::{Level, Output}, watchdog::Watchdog};
 use embassy_time::Timer;
@@ -14,6 +16,7 @@ use defmt_rtt as _;
 async fn main(_spawner: Spawner) {
     let p = hal::init(Default::default());
     let mut watchdog = Watchdog::new(p.WATCHDOG);
+
     let mut led_pin = Output::new(p.PIN_25, Level::Low);
 
     let count_max= 1000;
@@ -48,5 +51,6 @@ async fn main(_spawner: Spawner) {
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    hprintln!("{}", _info);
     loop {}
 }
