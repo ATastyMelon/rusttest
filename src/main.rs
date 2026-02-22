@@ -11,7 +11,6 @@ use embassy_time::Timer;
 
 use defmt_rtt as _;
 
-#[allow(unused)]
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
     let p = hal::init(Default::default());
@@ -36,12 +35,12 @@ async fn main(_spawner: Spawner) {
             } else {
                 count -= 1;
             }
+        }
+
+        if count < count_max {
+            count += 1;
         } else {
-            if count < count_max {
-                count += 1;
-            } else {
-                countdown = true;
-            }
+            countdown = true;
         }
 
         watchdog.feed();
